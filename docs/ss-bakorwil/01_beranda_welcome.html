@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="file:///D:/Projects/ZeroBug/bakorwil/public/images/pustaka.jpeg" type="images/kartu.png">
+    
+    <title>Pustaka Nawasena Bakorwil III Malang</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=100..900&display=swap');
+    
+    body { 
+        background: linear-gradient(to right, #ece9e6, #ffffff, #ece9e6); 
+        font-family: 'Inter', sans-serif; 
+    }
+    
+    .header-orange {
+        background-color: #ff9800; 
+        padding: 10px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15); 
+    }
+    
+    /* HERO: Tinggi fleksibel berdasarkan ukuran layar */
+    .hero-background {
+        background: url('file:///D:/Projects/ZeroBug/bakorwil/public/images/utama.jpg') no-repeat center center;
+        background-size: cover;
+        min-height: 280px; /* Lebih pendek di HP */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 40px 20px; /* Padding vertikal melar otomatis */
+        position: relative;
+    }
+    
+    @media (min-width: 768px) {
+        .hero-background {
+            min-height: 400px; /* Kembali ke 400px di Laptop/Tablet */
+        }
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.55); 
+        z-index: 1;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%; /* Menjaga content tetap aman di batas layar */
+    }
+    
+    /* BOX KONTEN: Padding mengecil di HP agar ruang baca luas */
+    .section-box {
+        background-color: white;
+        padding: 20px; /* Lebih kecil di HP */
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08); 
+        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; 
+        border-left: 5px solid #ff9800; 
+    }
+    
+    @media (min-width: 768px) {
+        .section-box {
+            padding: 30px; /* Kembali longgar di layar besar */
+            margin-bottom: 30px;
+        }
+        .section-box:hover {
+            transform: translateY(-8px) scale(1.005); 
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); 
+        }
+    }
+    
+    /* JUDUL HALAMAN: Mengecil di HP, Besar di Laptop */
+    .section-title-custom {
+        font-size: 1.8rem; /* Ukuran pas untuk HP */
+        color: #ff6f00; 
+        font-weight: 600; 
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #ff9800; 
+        margin-bottom: 25px;
+        position: relative; 
+    }
+    
+    @media (min-width: 768px) {
+        .section-title-custom {
+            font-size: 2.5rem; /* Ukuran besar untuk Laptop */
+            margin-bottom: 40px;
+        }
+    }
+
+    .section-title-custom::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -3px; 
+        transform: translateX(-50%);
+        width: 50px; 
+        height: 3px;
+        background-color: #ff9800; 
+        border-radius: 5px;
+    }
+    
+    .collection-item {
+        cursor: pointer;
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        border-radius: 8px; 
+        padding: 15px;
+        background-color: #fcfcfc; 
+    }
+    .collection-item:hover {
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
+        background-color: #fff;
+    }
+
+    /* MAP CONTAINER: Tinggi fleksibel */
+    .map-container {
+        border-radius: 12px; 
+        overflow: hidden;
+        height: 250px; /* Lebih pendek di HP agar tidak makan space */
+        width: 100%;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+    
+    @media (min-width: 768px) {
+        .map-container {
+            height: 350px; /* Kembali ke ukuran ideal di desktop */
+        }
+    }
+
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    /* KOTAK PENCARIAN: Margin disesuaikan agar pas di layar kecil */
+    .search-container {
+        margin-top: -30px; /* Di HP jangan terlalu ekstrim naik ke atas */
+        z-index: 10;
+        position: relative;
+        padding: 0 15px; /* Mencegah input nempel ke dinding layar HP */
+    }
+    
+    @media (min-width: 768px) {
+        .search-container {
+            margin-top: -60px; /* Kembali naik penuh di desktop */
+            padding: 0;
+        }
+    }
+
+    .search-input-custom {
+        border-radius: 50px;
+        padding: 12px 20px; /* Sedikit lebih compact di HP */
+        font-size: 1rem;
+        transition: all 0.3s ease-in-out;
+        border: 1px solid #ced4da; 
+    }
+    
+    @media (min-width: 768px) {
+        .search-input-custom {
+            padding: 15px 25px;
+            font-size: 1.1rem;
+        }
+        .search-input-custom:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 0.30rem rgba(255, 152, 0, 0.4); 
+            border-color: #ff9800;
+            background-color: #fff;
+        }
+    }
+
+    .search-button-custom {
+        border-top-right-radius: 50px !important;
+        border-bottom-right-radius: 50px !important;
+        background-color: #ff9800; 
+        border-color: #ff9800;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    .search-button-custom:hover {
+        background-color: #e68900; 
+        border-color: #e68900;
+    }
+
+    .footer-gradient {
+        background: linear-gradient(to right, #ff9800, #ffb74d); 
+        color: white;
+        padding: 30px 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+
+    /* FLOWCHART ALUR STRUKTUR */
+    .flowchart-item {
+        position: relative;
+        padding-bottom: 40px; 
+    }
+
+    .flowchart-item::after {
+        content: '\f287'; 
+        font-family: "bootstrap-icons";
+        font-size: 2rem; /* Diperkecil sedikit di HP */
+        color: #ff9800; 
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+    }
+
+    .flowchart-item:last-child::after {
+        content: none;
+    }
+    
+    .flowchart-box {
+        background-color: #f7f7f7;
+        border: 2px solid #ff9800;
+        border-radius: 10px;
+        padding: 15px; /* Lebih compact di HP */
+        transition: transform 0.3s ease;
+    }
+    
+    @media (min-width: 768px) {
+        .flowchart-box {
+            padding: 20px;
+        }
+    }
+
+    .offcanvas-header-custom {
+        background: linear-gradient(to right, #ff9800, #ffb74d); 
+    }
+
+    .modal-header-custom {
+        background-color: #ff9800; 
+    }
+    
+    .modal-header-custom .modal-title {
+        color: white !important;
+    }
+
+    .list-group-item-action.text-orange-link {
+        color: #ff9800;
+    }
+    .list-group-item-action.text-orange-link:hover {
+        color: #e68900;
+    }
+    
+    .list-group-item-action.text-success-link {
+        color: #198754;
+    }
+    .list-group-item-action.text-success-link:hover {
+        color: #157347;
+    }
+
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 3px solid #ff9800; 
+    }
+
+    .contact-background {
+        background-image: linear-gradient(to right, rgba(255, 152, 0, 0.85), rgba(255, 183, 77, 0.85)), 
+                          url('uploaded:image_781d03.jpg-4f26884c-1fc3-4dec-b5e1-df6599495c29'); 
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply; 
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        padding: 20px; /* Memastikan padding aman di HP */
+    }
+    
+    @media (min-width: 768px) {
+        .contact-background {
+            padding: 40px;
+        }
+    }
+</style>
+</head>
+<body>
+<header class="sticky-top border-bottom" style="background-color: #f9ad16ff; border-bottom: 3px solid #f9ad16ff;">
+  <div class="container-fluid d-flex justify-content-between align-items-center py-2 px-4">
+
+    <div class="d-flex align-items-center text-start gap-2">
+      <img alt="Logo Jatim" class="rounded-circle border border-2 border-white" src="file:///D:/Projects/ZeroBug/bakorwil/public/images/kartu.png" style="height: 45px; width: 45px; object-fit: cover;" />
+      <h5 class="text-white fw-bolder mb-0 d-none d-sm-block">
+        Pustaka Nawasena Bakorwil III Malang
+      </h5>
+      <h6 class="text-white fw-bolder mb-0 d-block d-sm-none">
+        Pustaka Nawasena
+      </h6>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      
+      <div class="d-flex align-items-center gap-2" style="display: flex !important;">
+  
+  <a href="https://x.com/Bakorwil3Malang?t=-6lq7bvn2jxresCEdaN1Qg&s=08" 
+     target="_blank" 
+     title="Twitter" 
+     style="display: inline-block !important; margin: 0 4px;">
+    <i class="bi bi-twitter text-white fs-5"></i>
+  </a>
+  
+  <a href="http://www.youtube.com/@bakorwiliiimalang5279" 
+     target="_blank" 
+     title="YouTube" 
+     style="display: inline-block !important; margin: 0 4px;">
+    <i class="bi bi-youtube text-white fs-5"></i>
+  </a>
+  
+  <a href="https://www.instagram.com/bakorwilmalang?igsh=MWdqOHN3eTBsM3hzaA==" 
+     target="_blank" 
+     title="Instagram" 
+     style="display: inline-block !important; margin: 0 4px;">
+    <i class="bi bi-instagram text-white fs-5"></i>
+  </a>
+
+</div>
+
+      <button class="navbar-toggler d-lg-none border-0 p-0" 
+              type="button" 
+              data-bs-toggle="offcanvas" 
+              data-bs-target="#offcanvasMenuTop"
+              aria-controls="offcanvasMenuTop"
+              style="background: none;">
+        <i class="bi bi-list fs-2 text-white"></i>
+      </button>
+
+    </div>
+
+  </div>
+</header>
+<div class="offcanvas offcanvas-top d-lg-none" tabindex="-1" id="offcanvasMenuTop">
+  <div class="offcanvas-header bg-gradient-orange text-white rounded-bottom-4 shadow-sm py-3">
+    <h5 class="offcanvas-title fw-bold d-flex align-items-center">
+      <i class="bi bi-book-half me-2 fs-4"></i> Pustaka Nawasena
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column justify-content-start align-items-center text-center p-4">
+    <a href="#" class="menu-mobile-item mb-3" onclick="closeOffcanvas()">
+      <i class="bi bi-box-arrow-in-right me-2"></i> Login
+    </a>
+    
+    <a href="#" class="menu-mobile-item mb-3" onclick="closeOffcanvas()">
+      <i class="bi bi-person-circle me-2"></i> Profil
+    </a>
+    <a href="#" class="menu-mobile-item mb-3" onclick="closeOffcanvas()">
+      <i class="bi bi-book me-2"></i> Koleksi Buku
+    </a>
+    <a href="#" class="menu-mobile-item mb-3" onclick="closeOffcanvas()">
+      <i class="bi bi-gear me-2"></i> Layanan
+    </a>
+    <a href="#" class="menu-mobile-item mb-3" onclick="closeOffcanvas()">
+      <i class="bi bi-building me-2"></i> Peralatan &amp; Fasilitas
+    </a>
+    <a href="#" class="menu-mobile-item" onclick="closeOffcanvas()">
+      <i class="bi bi-geo-alt me-2"></i> Kontak
+    </a>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function closeOffcanvas() {
+    const offcanvasEl = document.querySelector('#offcanvasMenuTop');
+    const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    if (offcanvas) offcanvas.hide();
+  }
+</script>
+
+<style>
+  .bg-gradient-orange {
+    background: linear-gradient(135deg, #ff9800, #ffb84d);
+  }
+
+  .offcanvas {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.3, 1);
+    overflow-y: auto;
+  }
+
+  .offcanvas.offcanvas-top {
+    transform: translateY(-100%);
+  }
+  .offcanvas.show {
+    transform: translateY(0);
+  }
+
+  .offcanvas-body {
+    margin-top: 1px; 
+    padding-bottom: 2rem;
+  }
+
+  .menu-mobile-item {
+    display: block;
+    font-size: 1.05rem;
+    color: #333;
+    background: white;
+    border-radius: 12px;
+    padding: 10px 20px;
+    width: 80%;
+    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.1);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .menu-mobile-item:hover {
+    background: linear-gradient(135deg, #ffb84d, #ff9800);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 152, 0, 0.3);
+  }
+
+  .menu-mobile-item i {
+    font-size: 1.2rem;
+    color: #ff9800;
+    transition: color 0.3s ease;
+  }
+
+  .menu-mobile-item:hover i {
+    color: black;
+  }
+</style>
+
+
+<style>
+    .social-link {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #fff;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-link.twitter { color: #1DA1F2; }      
+    .social-link.youtube { color: #FF0000; }     
+    .social-link.instagram {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        color: #fff;
+    }
+
+    .social-link:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 576px) {
+        header .container {
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
+        }
+        .social-icons {
+            display: flex !important;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="hero-background position-relative">
+  <div class="hero-overlay"></div>
+
+  <div class="container position-relative hero-content text-center">
+    <h1 class="fw-bolder animate__animated animate__bounceIn" style="font-size: 3rem;">
+      Selamat Datang di Pustaka Nawasena!
+    </h1>
+    <p class="lead fw-bold mt-3 animate__animated animate__bounceIn" style="animation-delay: 0.5s;">
+      Akses koleksi khusus untuk mendukung penelitian dan kebijakan Anda.
+    </p>
+  </div>
+
+  <div class="container search-menu-wrapper position-relative" data-aos="fade-up">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <form action="#" method="GET" class="mt-5">
+          <div class="input-group input-group-lg shadow-lg rounded-pill overflow-hidden">
+            <input 
+              type="search" 
+              name="search" 
+              class="form-control search-input-custom"
+              placeholder="Cari Koleksi, Judul, Penulis, atau Subjek..." 
+              aria-label="Cari Buku" />
+            <button class="btn search-button-custom" type="submit">
+              <i class="bi bi-search me-2"></i> Cari
+            </button>
+          </div>
+        </form>
+
+        <div class="menu-desktop d-none d-lg-flex align-items-center justify-content-center mt-4">
+    <a class="menu-item" href="#">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Login</span>
+    </a>
+    
+    <a class="menu-item" href="#">
+        <i class="bi bi-person-circle"></i>
+        <span>Profil</span>
+    </a>
+    <a class="menu-item" href="#">
+        <i class="bi bi-book"></i>
+        <span>Koleksi</span>
+    </a>
+    <a class="menu-item" href="#">
+        <i class="bi bi-gear"></i>
+        <span>Layanan</span>
+    </a>
+    <a class="menu-item" href="#">
+        <i class="bi bi-building"></i>
+        <span>Fasilitas</span>
+    </a>
+    <a class="menu-item" href="#">
+        <i class="bi bi-geo-alt"></i>
+        <span>Kontak</span>
+    </a>
+</div>
+        <div class="menu-border mx-auto mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function closeOffcanvas() {
+  const offcanvasEl = document.querySelector('#offcanvasMenuTop');
+  const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+  if (offcanvas) offcanvas.hide();
+}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const menuDesktop = document.querySelector(".menu-desktop");
+  const body = document.body;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const pixelRatio = window.devicePixelRatio;
+
+  if (isMobile && pixelRatio <= 1.3) {
+    document.body.classList.add("force-desktop");
+    if (menuDesktop) {
+      menuDesktop.classList.remove("d-none");
+      menuDesktop.classList.add("d-flex");
+    }
+
+    document.querySelector("html").style.fontSize = "95%";
+
+    console.log("📱 Mode Desktop terdeteksi di HP → Tampilan desktop diaktifkan penuh");
+  }
+});
+</script>
+
+<!-- 💅 STYLE -->
+<style>
+.hero-background {
+  background: url('file:///D:/Projects/ZeroBug/bakorwil/public/images/utama.jpg') no-repeat center center;
+  background-size: cover;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
+  position: relative;
+  padding-top: 80px;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.hero-content {
+  margin-top: 70px;
+  z-index: 2;
+}
+.search-menu-wrapper {
+  margin-top: 100px;
+  z-index: 2;
+  position: relative;
+}
+
+.search-input-custom {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.05rem;
+  backdrop-filter: blur(6px);
+}
+.search-input-custom::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+.search-button-custom {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.search-button-custom:hover {
+  background-color: #ff9d26;
+  transform: scale(1.05);
+}
+
+.menu-desktop {
+  gap: 1.75rem;
+  padding: 1rem 0 0.5rem;
+  flex-wrap: nowrap;
+}
+.menu-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: transform 0.18s ease, color 0.18s ease, text-shadow 0.18s ease;
+}
+.menu-item:hover {
+  color: #f8f8f8;
+  transform: translateY(-2px);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.45);
+}
+
+
+@media (max-width: 768px) {
+  .menu-desktop { display: none !important; }
+  .search-menu-wrapper { margin-top: 70px; }
+}
+</style>
+
+
+
+<div class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="100">
+    
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800; margin-top: 40px;">
+        PUSTAKA NAWASENA BAKORWIL III MALANG
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;">
+        </span>
+    </h2>
+
+    <div class="row align-items-center mt-4">
+        
+        <div class="col-md-4 mb-3" data-aos="zoom-in" data-aos-delay="100">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/karasteristik (2).jpeg" 
+                 alt="Pustaka Bakorwil III Malang" 
+                 class="img-fluid rounded-3 shadow border border-3 border-warning" 
+                 style="max-width: 80%; height: auto;">
+        </div>
+
+        <div class="col-md-8 text-start d-flex flex-column justify-content-center" data-aos="fade-left" data-aos-delay="350">
+            
+            <h3 class="fw-bold text-warning mb-3" style="font-size: 2rem; line-height: 1.3;">
+                Explore the World of Knowledge at<br>
+                <span class="text-secondary">Pustaka Nawasena Bakorwil III Malang</span>
+            </h3>
+
+            <blockquote class="text-muted fst-italic mb-3" 
+                        style="font-size: 1.1rem; border-left: 4px solid #ff9800; padding-left: 1rem;">
+                "A library is a treasury of knowledge and the dwelling of the wise."<br>
+                <small>- Ibnu Sina (Avicena) -</small><br>
+                <span style="font-style: normal;">
+                    Perpustakaan adalah gudang pengetahuan dan tempat tinggal orang-orang bijaksana.
+                </span>
+            </blockquote>
+
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                <strong>Pustaka Nawasena Bakorwil III Malang</strong> merupakan perpustakaan khusus yang berada di bawah Bakorwil III Malang — instansi Pemerintah Provinsi Jawa Timur — 
+                dengan koleksi dan layanan informasi yang ditujukan untuk memenuhi kebutuhan informasi di lingkungan internal. 
+                Berbeda dengan perpustakaan umum atau akademik, perpustakaan khusus Bakorwil III Malang memiliki sasaran pengguna yang terbatas 
+                dan fokus pada bidang tertentu sesuai dengan tugas pokok dan fungsi.<br><br>
+            </p>
+
+        </div>
+    </div>
+</div>
+
+
+        
+<div class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="200">
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800;">
+        KARAKTERISTIK
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;"></span>
+    </h2>
+
+    <div class="row align-items-center mt-4">
+        <div class="col-md-8 text-start d-flex flex-column justify-content-center" data-aos="fade-right" data-aos-delay="350">
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Koleksi yang terfokus, pengguna yang terbatas (umumnya hanya pegawai atau peneliti internal), serta layanan yang bersifat mendalam dan berspesialisasi. 
+                Koleksi yang dimiliki berupa dokumen-dokumen kebijakan, regulasi, laporan kegiatan, laporan magang mahasiswa/sekolah, arsip internal, hingga majalah referensi dari berbagai instansi.
+            </p>
+
+            <p class="fw-semibold text-warning mt-3" style="font-size: 2rem; line-height: 1.6;">
+                <em>
+                    “Let’s grow together through reading and sharing knowledge.  
+                    The more we read, the more we connect — let’s make our library alive with curiosity and collaboration!”
+                </em>
+            </p>
+        </div>
+
+        <div class="col-md-4 mb-3 text-center" data-aos="zoom-in" data-aos-delay="100">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/pengertian.jpeg" alt="Karakteristik" 
+                 class="img-fluid rounded-3 shadow border border-3 border-warning" 
+                 style="max-width: 85%; height: auto;">
+        </div>
+    </div>
+</div>
+
+
+<div class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="300">
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800;">
+        TUJUAN
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;"></span>
+    </h2>
+
+    <div class="row align-items-center mt-4">
+        <div class="col-md-4 mb-3 text-center" data-aos="zoom-in" data-aos-delay="100">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/tujuan-revisi.jpeg" alt="Tujuan Pustaka Nawasena" 
+                 class="img-fluid rounded-3 shadow border border-3 border-warning" 
+                 style="max-width: 60%; height: auto;">
+        </div>
+
+        <div class="col-md-8 text-start d-flex flex-column justify-content-center" data-aos="fade-left" data-aos-delay="350">
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Menyediakan layanan informasi secara efektif dan menunjang kegiatan penelitian serta pengembangan di Bakorwil III Malang, 
+                sekaligus mendukung program riset akademik dan pengelolaan data pemerintahan secara optimal untuk mendukung pembangunan daerah.
+            </p>
+
+            <p class="fw-semibold text-warning mt-3" style="font-size: 2rem; line-height: 1.6;">
+                <em>
+                    “Empowering knowledge for a brighter future —  
+                    together we learn, share, and grow towards excellence!”
+                </em>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="400">
+
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800;">
+        FUNGSI
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;"></span>
+    </h2>
+
+    <div class="row justify-content-center align-items-start mt-4 px-3" data-aos="fade-up" data-aos-delay="350">
+        <div class="col-md-6 mb-4 text-start">
+            <h5 class="fw-bold text-success"><i class="bi bi-graph-up me-2"></i>Mendukung Pengambilan Keputusan Berbasis Data</h5>
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Dalam era keterbukaan informasi, perpustakaan khusus menjadi sumber utama informasi yang dapat diandalkan 
+                untuk mendukung pengambilan keputusan dan penyusunan kebijakan di masa mendatang.
+                Di Bakorwil III Malang, perpustakaan menyediakan data dan dokumen yang dibutuhkan untuk penelitian dan referensi kebijakan.
+            </p>
+        </div>
+
+        <div class="col-md-6 mb-4 text-start">
+            <h5 class="fw-bold text-success"><i class="bi bi-archive me-2"></i>Pelestarian Arsip dan Dokumen Negara</h5>
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Berfungsi strategis dalam pelestarian pengetahuan, dokumentasi kebijakan, serta arsip penting sebagai referensi di lingkungan internal pemerintahan.
+                Dokumen kebijakan, naskah peraturan, riset internal, hingga laporan evaluasi program menjadi bagian dari memori kelembagaan yang penting untuk kesinambungan pemerintah.
+            </p>
+        </div>
+
+        <div class="col-md-6 mb-4 text-start">
+            <h5 class="fw-bold text-success"><i class="bi bi-journal-text me-2"></i>Mendukung Penelitian dan Inovasi Kebijakan</h5>
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Bagi lembaga yang memiliki fungsi litbang (penelitian dan pengembangan), perpustakaan khusus menjadi sarana penting untuk mendukung proses riset.
+                Keberadaan referensi yang lengkap dan akses terhadap literatur mutakhir memungkinkan pengembangan kebijakan yang inovatif dan relevan.
+            </p>
+        </div>
+
+        <div class="col-md-6 mb-4 text-start">
+            <h5 class="fw-bold text-success"><i class="bi bi-people me-2"></i>Meningkatkan Kapasitas SDM Aparatur Sipil Negara (ASN)</h5>
+            <p class="text-muted lh-lg" style="font-size: 1.05rem; text-align: justify;">
+                Dengan menyediakan sumber belajar dan referensi, perpustakaan khusus membantu dalam peningkatan kapasitas ASN melalui pelatihan, pendidikan, dan pengembangan profesional berkelanjutan.
+            </p>
+        </div>
+    </div>
+
+    <!-- Motivasi dalam satu container sama -->
+    <p class="fw-semibold text-warning mt-3 px-3" style="font-size: 2rem; line-height: 1.6;">
+        <em>
+            “Knowledge preserved is wisdom shared —  
+            together we sustain the legacy of information for the generations to come.”
+        </em>
+    </p>
+</div>
+
+
+        
+<div class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="500">
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800;">
+        KOLEKSI
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;"></span>
+    </h2>
+
+    <p class="text-muted lh-lg mx-auto" style="font-size: 1.05rem; max-width: 900px;">
+        Pustaka Nawasena Bakorwil III Malang memiliki beragam koleksi yang mendukung kebutuhan informasi dan pengembangan wawasan. 
+        Koleksi ini mencakup bahan bacaan umum, referensi akademik, serta dokumen internal pemerintahan yang dapat menjadi sumber inspirasi 
+        bagi pegawai dan peneliti di lingkungan Bakorwil.
+    </p>
+
+    <h5 class="text-center text-primary mb-4 mt-4 fw-semibold">Tipe Koleksi</h5>
+
+<div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="300">
+    <!-- Item 1: E-Magazine -->
+    <div class="col-md-3 col-sm-6 mb-4 collection-item">
+        <a href="file:///D:/Projects/ZeroBug/bakorwil/public/pdf/Magazine.pdf" target="_blank" class="text-decoration-none">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/megazine.JPG" alt="Magazine" 
+                 class="img-fluid rounded-3 shadow border border-2 border-warning" 
+                 style="width: 145px; height: 190px; object-fit: cover;">
+            <p class="fw-bold mt-3 text-secondary">E-MAGAZINE</p>
+        </a>
+    </div>
+
+    <!-- Item 2: Reference -->
+    <div class="col-md-3 col-sm-6 mb-4 collection-item">
+        <a href="#" class="text-decoration-none">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/perefence.jpeg" alt="Reference" 
+                 class="img-fluid rounded-3 shadow border border-2 border-warning" 
+                 style="width: 145px; height: 190px; object-fit: cover;">
+            <p class="fw-bold mt-3 text-secondary">REFERENCE</p>
+        </a>
+    </div>
+</div>
+
+
+    <p class="fw-semibold text-warning mt-3 px-3" style="font-size: 2rem; line-height: 1.6;">
+        <em>
+            “Discover, read, and share — every page holds a new perspective.  
+            Let’s keep our library vibrant with curiosity and inspiration.”
+        </em>
+    </p>
+
+<hr class="my-4" style="border-top: 3px solid #ff9800; width: 80%; margin: 2rem auto;">
+<h5 class="text-center text-primary mb-3 fw-semibold">Jumlah Koleksi</h5>
+<div class="row text-center justify-content-center">
+    <div class="col-6 col-md-3 fw-bold fs-4 text-success">
+        142 Jilid
+    </div>
+    <div class="col-6 col-md-3 fw-bold fs-4 text-success">
+        142 Eksemplar
+    </div>
+</div>
+<div id="prosedur-section" class="section-box text-center mt-5" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="600">
+    <h2 class="fw-bold position-relative d-inline-block mb-3 w-100" 
+        style="font-size: 2rem; color: #ff9800;">
+        PROSEDUR LAYANAN
+        <span class="d-block mt-2" 
+              style="width: 100%; height: 5px; background-color: #ff9800; border-radius: 3px;"></span>
+    </h2>
+
+    <p class="text-center small text-muted mb-4">
+        Urutan langkah-langkah untuk mendapatkan layanan di Perpustakaan Khusus.
+    </p>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-6 mb-4 flowchart-item text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="flowchart-box shadow-sm p-3 rounded-3 border border-light">
+                <i class="bi bi-person-badge fs-1 text-primary"></i>
+                <p class="fw-bold text-primary mt-2 mb-1">LANGKAH 1</p>
+                <p class="small text-muted mb-0">Lakukan Registrasi dan verifikasi keanggotaan.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4 flowchart-item text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="flowchart-box shadow-sm p-3 rounded-3 border border-light">
+                <i class="bi bi-search fs-1 text-warning"></i>
+                <p class="fw-bold text-warning mt-2 mb-1">LANGKAH 2</p>
+                <p class="small text-muted mb-0">Cari & Pilih Buku yang dibutuhkan dari koleksi khusus.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4 flowchart-item text-center" data-aos="fade-up" data-aos-delay="300">
+            <div class="flowchart-box shadow-sm p-3 rounded-3 border border-light">
+                <i class="bi bi-journal-check fs-1 text-success"></i>
+                <p class="fw-bold text-success mt-2 mb-1">LANGKAH 3</p>
+                <p class="small text-muted mb-0">Lakukan Peminjaman dengan  datang ditempat dan scan kartu anggota.</p>            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4 text-center" data-aos="fade-up" data-aos-delay="400">
+            <div class="flowchart-box shadow-sm p-3 rounded-3 border border-light">
+                <i class="bi bi-arrow-return-left fs-1 text-danger"></i>
+                <p class="fw-bold text-danger mt-2 mb-1">LANGKAH 4</p>
+                <p class="small text-muted mb-0">Lakukan Pengembalian sebelum batas waktu yang ditentukan.</p>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center small text-muted mt-4">
+        <i class="bi bi-info-circle me-1"></i> Jam Layanan: Senin–Jumat, 08.00 – 16.00
+    </p>
+</div>
+        <div class="section-box p-5 contact-background" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="700">
+            <h2 class="text-white mb-4 fw-bolder text-center">KONTAK & LOKASI</h2>
+            <div class="row">
+                <div class="col-lg-6 text-white mb-4 mb-lg-0">
+                    <h4 class="text-white mb-3">Kontak Person</h4>
+                    <p class="mb-2"><i class="bi bi-telephone-fill me-2"></i>Telepon/WA: 085134791603</p>
+                    <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i>E-Mail: arsiptubakorwil@gmail.com</p>
+                    <p class="mb-2"><i class="bi bi-globe me-2"></i>Website: https://bakorwilmalang.jatimprov.go.id</p>
+                    <p class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i>Alamat: Jl. Simpang Ijen No. 2 Kota Malang</p>
+                </div>
+                <div class="col-lg-6">
+                    <h4 class="text-white mb-3">Peta Lokasi Bakorwil III Malang</h4>
+                    <div class="map-container shadow-lg">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.3496328766115!2d112.63001927453488!3d-7.980644292023594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629e924a3502b%3A0xc023c023d6a911a!2sBakorwil%20III%20Malang!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    <footer class="text-center footer-gradient mt-5 fw-bold" data-aos="fade-up" data-aos-id="fade-in-repeat" data-aos-delay="800">
+        <p class="mb-0">© 2025 Pustaka Nawasena Bakorwil III Malang.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1200, 
+            once: false,    
+            mirror: true,   
+            easing: 'ease-out', 
+            offset: 50, 
+        });
+    </script>
+</body>
+    </script>
+    
+
+<style>
+    html {
+        scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar {
+        display: none; 
+    }
+
+    html, body {
+        overflow-x: hidden !important;
+        margin: 0;
+        padding: 0;
+    }
+html, body {
+  overflow-x: clip !important;  
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Cegah semua elemen meluber */
+* {
+  box-sizing: border-box;
+  max-width: 100vw;
+}
+
+/* Pastikan tidak ada efek samping dari header / hero */
+header, .header, .hero, .hero-background {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: clip !important;
+}
+
+.offcanvas, .modal {
+  max-width: 100vw;
+  overflow-x: hidden !important;
+}
+
+</style>
+</body>
+</html>
+

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi RFID | Pustaka Nawasena</title>
+    <link rel="icon" href="file:///D:/Projects/ZeroBug/bakorwil/public/images/kartu.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lib-navy: #0f172a;
+            --lib-gold: #b45309;
+        }
+
+        * { user-select: none; }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url("file:///D:/Projects/ZeroBug/bakorwil/public/images/utama.jpg"); 
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .top-bar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-bottom: 4px solid var(--lib-gold);
+            padding: 0.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+            z-index: 100;
+        }
+
+        .logo-frame {
+            background: white; border: 2px solid #e2e8f0;
+            padding: 6px 16px; border-radius: 16px;
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        /* KIOSK CARD */
+        .main-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+
+        .kiosk-card {
+            background: white; width: 100%; max-width: 950px;
+            border-radius: 2.5rem; display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            overflow: hidden; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.6);
+        }
+
+        .visual-side {
+            background: var(--lib-navy); padding: 3rem;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            color: white; text-align: center;
+        }
+
+        /* RFID RIPPLE ANIMATION */
+        .scanner-container { position: relative; width: 140px; height: 140px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; }
+        .ripple {
+            position: absolute; width: 100%; height: 100%;
+            border: 2px solid var(--lib-gold); border-radius: 50%;
+            animation: rippleEffect 2s infinite; opacity: 0;
+        }
+        @keyframes rippleEffect {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        .process-side { padding: 4rem; display: flex; flex-direction: column; justify-content: center; background: white; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 12px; background: #f8fafc;
+            border: 1px solid #e2e8f0; border-radius: 100px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dot-pulse { width: 8px; height: 8px; border-radius: 50%; }
+        .online { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+        .offline { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+        .lib-footer {
+            background: rgba(0, 0, 0, 0.9); color: rgba(255,255,255,0.4);
+            padding: 0.8rem; text-align: center; font-size: 0.7rem; letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-bar">
+        <div class="logo-frame">
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/kartu.png" class="h-10">
+            <div class="w-[1px] h-8 bg-slate-200"></div>
+            <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/bakorwil.png" class="h-10">
+            <div class="ml-2">
+                <h1 class="text-slate-800 font-extrabold text-xl leading-none">NAWASENA</h1>
+                <p class="text-orange-700 text-[9px] font-bold uppercase tracking-[0.2em]">Smart Library System</p>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <div id="clock" class="text-4xl font-black text-slate-800 tracking-tighter">00:00</div>
+            <div id="date" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Memuat...</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="kiosk-card">
+            <div class="visual-side">
+                <div class="scanner-container">
+                    <div class="ripple"></div>
+                    <div class="ripple" style="animation-delay: 0.6s"></div>
+                    <div class="relative z-10 w-24 h-24 bg-gradient-to-br from-orange-500 to-orange-700 rounded-3xl shadow-2xl flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-black mb-2 uppercase">Verifikasi<br>Identitas</h2>
+                <div class="w-12 h-1 bg-orange-500 rounded-full mb-6"></div>
+                <p class="text-[11px] text-slate-400 leading-relaxed px-8 italic">
+                    Tempelkan Kartu Anggota Anda pada Reader untuk menyelesaikan transaksi.
+                </p>
+            </div>
+
+            <div class="process-side">
+                <div class="status-badge">
+                    <div id="mqtt-dot" class="dot-pulse offline"></div>
+                    <span id="mqtt-status-text" class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Broker Disconnected</span>
+                </div>
+
+                <h3 id="main-status-text" class="text-3xl font-extrabold text-slate-800 tracking-tighter leading-tight mb-4">
+                    SILAKAN SCAN <br><span class="text-orange-600">KARTU ANGGOTA</span>
+                </h3>
+                
+                <p id="sub-status-text" class="text-sm text-slate-400 leading-relaxed mb-10 max-w-sm">
+                    Sistem sedang dalam mode siaga. Pastikan kartu anggota terdaftar di Pustaka Nawasena.
+                </p>
+
+                <div id="success-box" class="hidden transform transition-all duration-500">
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white text-xl">✓</div>
+                        <div>
+                            <p class="text-emerald-700 font-black text-sm uppercase" id="member-name">Memproses...</p>
+                            <p class="text-emerald-600 text-[11px]">Identitas berhasil diverifikasi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-8 border-t border-slate-100 flex justify-between items-center">
+                    <button onclick="batalTrx()" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest">
+                        ← Batalkan
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <span id="device-status" class="text-[9px] font-bold text-slate-300 uppercase">Hardware Offline</span>
+                        <div id="device-dot" class="w-2 h-2 bg-slate-300 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="lib-footer">
+        Bakorwil III Malang &bull; Smart Terminal Node v4.2.0 &bull; 2026
+    </footer>
+
+    <script>
+// 1. Clock Engine
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            document.getElementById('date').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // 2. MQTT Setup
+        const mqttDot = document.getElementById('mqtt-dot');
+        const mqttStatusText = document.getElementById('mqtt-status-text');
+        const mainStatusText = document.getElementById('main-status-text');
+        const subStatusText = document.getElementById('sub-status-text');
+        const successBox = document.getElementById("success-box");
+        const memberNameText = document.getElementById("member-name");
+
+        const client = mqtt.connect('ws://' + window.location.hostname + ':9001');
+
+        client.on('connect', () => {
+            mqttDot.classList.replace('offline', 'online');
+            mqttStatusText.textContent = "Broker Connected";
+            client.subscribe('rfid/scan/member');
+            client.subscribe('rfid/device/status');
+            
+            // Set ESP32 ke mode baca member
+            client.publish('rfid/mode/set', 'scan_member');
+        });
+
+        client.on('message', async (topic, message) => {
+            const payload = message.toString();
+
+            if (topic === 'rfid/scan/member') {
+                handleRfidScan(payload);
+            }
+            
+            if (topic === 'rfid/device/status' && payload === 'online') {
+                document.getElementById('device-dot').classList.replace('bg-slate-300', 'bg-green-400');
+                document.getElementById('device-status').textContent = "ESP32 Online";
+            }
+        });
+
+        async function handleRfidScan(uid) {
+            // Beri Feedback Visual saat scan terdeteksi
+            mainStatusText.innerHTML = "MEMVALIDASI... <br><span class='text-orange-600'>HARAP TUNGGU</span>";
+            
+            try {
+                const res = await fetch(`/api/esp/check-member?uid=${uid}`);
+                const data = await res.json();
+
+                if (data.status === "berhasil") {
+                    mainStatusText.innerHTML = "VERIFIKASI <br><span class='text-emerald-600'>BERHASIL!</span>";
+                    memberNameText.textContent = data.nama;
+                    
+                    // Sembunyikan instruksi lama, tampilkan box sukses
+                    subStatusText.classList.add('hidden');
+                    successBox.classList.remove('hidden');
+
+                    // --- LOGIKA PENYIMPANAN DATA TRANSAKSI ---
+                    // Ambil data buku yang disimpan di halaman sebelumnya (Scan Barcode)
+                    const bukuRaw = localStorage.getItem('trx_buku');
+                    const bukuData = bukuRaw ? JSON.parse(bukuRaw) : {};
+
+                    // Gabungkan data member + data buku ke key 'trx'
+                    const finalTrx = {
+                        // Data dari Database Member (API)
+                        anggota_id: data.id,
+                        nama_peminjam: data.nama,
+                        rfid_uid: uid,
+                        
+                        // Data dari LocalStorage sebelumnya (Buku)
+                        biblio_id: bukuData.id || bukuData.biblio_id,
+                        barcode: bukuData.barcode,
+                        judul: bukuData.judul,
+                        penulis: bukuData.penulis,
+                        
+                        // Metadata Transaksi
+                        waktu_transaksi: new Date().toLocaleTimeString('id-ID'),
+                        tanggal: new Date().toISOString().split('T')[0]
+                    };
+
+                    localStorage.setItem('trx', JSON.stringify(finalTrx));
+        
+                    // Beri instruksi ke hardware (suara/led sukses)
+                    client.publish('rfid/status', 'success');
+
+                    // Redirect ke halaman hasil
+                    setTimeout(() => {
+                        window.location.href = "/transaksi/hasil";
+                    }, 1800);
+
+                } else {
+                    mainStatusText.innerHTML = "KARTU <br><span class='text-red-600'>TIDAK TERDAFTAR</span>";
+                    client.publish('rfid/status', 'error');
+                    
+                    setTimeout(() => {
+                        mainStatusText.innerHTML = "SILAKAN SCAN <br><span class='text-orange-600'>KARTU ANGGOTA</span>";
+                    }, 3000);
+                }
+            } catch (err) {
+                console.error("API Error:", err);
+            }
+        }
+
+        function batalTrx() {
+            client.publish('rfid/mode/set', 'standby');
+            window.location.href = "/transaksi/scan-barcode";
+        }
+
+        client.on('close', () => {
+            mqttDot.classList.replace('online', 'offline');
+            mqttStatusText.textContent = "Broker Offline";
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Layanan Mandiri | Pustaka Nawasena</title>
+    <link rel="icon" href="file:///D:/Projects/ZeroBug/bakorwil/public/images/kartu.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lib-navy: #0f172a;
+            --lib-gold: #b45309;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url("file:///D:/Projects/ZeroBug/bakorwil/public/images/utama.jpg"); 
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .top-bar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            border-bottom: 4px solid var(--lib-gold);
+            padding: 0.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo-frame {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .logo-frame::after {
+            content: "";
+            position: absolute;
+            left: -2px;
+            top: 25%;
+            height: 50%;
+            width: 4px;
+            background: var(--lib-gold);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .img-container {
+            height: 45px;
+            width: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .kiosk-card {
+            background: white;
+            width: 95%;
+            max-width: 950px;
+            height: 65vh;
+            border-radius: 2.5rem;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.6);
+        }
+
+        .instr-side {
+            padding: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-image: radial-gradient(at top left, #ffffff, #f8fafc);
+        }
+
+        .scan-side {
+            background: var(--lib-navy);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        #scanner {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #scanner:focus {
+            border-color: var(--lib-gold);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 30px rgba(180, 83, 9, 0.4);
+            transform: scale(1.02);
+        }
+
+        .step-circle {
+            width: 26px;
+            height: 26px;
+            background: var(--lib-gold);
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .lib-footer {
+            background: rgba(15, 23, 42, 0.9);
+            color: rgba(255,255,255,0.4);
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        #loading-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 50;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-bar">
+        <div class="logo-frame">
+            <div class="img-container">
+                <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/kartu.png" alt="Logo Kartu" class="h-full object-contain">
+            </div>
+            <div class="w-[2px] h-8 bg-slate-200"></div> 
+            <div class="img-container">
+                <img src="file:///D:/Projects/ZeroBug/bakorwil/public/images/bakorwil.png" alt="Logo Bakorwil" class="h-full object-contain">
+            </div>
+            <div class="ml-2 pr-2">
+                <h1 class="text-slate-800 font-extrabold text-xl leading-none tracking-tighter">NAWASENA</h1>
+                <p class="text-orange-700 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Smart Library System</p>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <div id="clock" class="text-4xl font-black text-slate-800 tracking-tighter leading-none">00:00</div>
+            <div id="date" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Memuat Kalender...</div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="kiosk-card relative">
+            <div id="loading-overlay">
+                <div class="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p class="text-white font-bold tracking-widest text-sm uppercase" id="loading-text">Memproses...</p>
+            </div>
+
+            <div class="instr-side">
+                <h2 class="text-4xl font-black text-slate-800 mb-2">Layanan<br><span class="text-orange-600 uppercase">Mandiri</span></h2>
+                <div class="h-1 w-20 bg-orange-500 mb-8 rounded-full"></div>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center">
+                        <span class="step-circle">1</span>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-sm">Pindai Barcode</h4>
+                            <p class="text-xs text-slate-400">Arahkan kode buku ke sensor</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <span class="step-circle">2</span>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-sm">Validasi Data</h4>
+                            <p class="text-xs text-slate-400">Tunggu sistem memverifikasi buku</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="step-circle">3</span>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-sm">Scan Kartu</h4>
+                            <p class="text-xs text-slate-400">Scan kartu anggota anda</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <span class="step-circle">4</span>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-sm">Konfirmasi</h4>
+                            <p class="text-xs text-slate-400">Selesaikan transaksi peminjaman</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scan-side">
+                <div class="text-6xl mb-6 opacity-80">📖</div>
+                <h3 class="text-xl font-bold tracking-tight mb-2 uppercase">Siap Memindai</h3>
+                <p class="text-white/30 text-[10px] uppercase tracking-[0.5em] mb-10 text-center">Masukkan Barcode Buku</p>
+
+                <div class="w-full px-4">
+                    <input id="scanner" autofocus type="text" placeholder="----" autocomplete="off" />
+                </div>
+
+                <div id="status-text" class="mt-12 flex items-center gap-3">
+                    <span id="status-ping" class="flex h-2 w-2 rounded-full bg-orange-500 animate-ping"></span>
+                    <span id="status-label" class="text-[10px] font-black uppercase tracking-[0.4em] text-orange-500">System Online</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="lib-footer">
+        Bakorwil III Malang &bull; Smart Terminal Node v4.2.0 &bull; 2026
+    </footer>
+
+<script>
+// UI Clock
+setInterval(() => {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('id-ID', { hour12: false });
+    document.getElementById('date').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
+}, 1000);
+
+const input = document.getElementById("scanner");
+const loading = document.getElementById("loading-overlay");
+const statusDot = document.getElementById("status-dot");
+const statusLabel = document.getElementById("status-label");
+let isRedirecting = false;
+
+// MQTT Connection
+const client = mqtt.connect('ws://' + window.location.hostname + ':9001');
+
+client.on('connect', () => {
+    statusDot.className = "h-2 w-2 rounded-full bg-green-500 animate-pulse";
+    statusLabel.innerText = "Sistem Online";
+    statusLabel.className = "text-[10px] font-bold uppercase tracking-widest text-green-500";
+    client.subscribe('rfid/ui/detail');
+    client.subscribe('rfid/ui/redirect_return');
+});
+
+client.on('message', (topic, message) => {
+    const data = JSON.parse(message.toString());
+    handleLogic(topic, data);
+});
+
+// Jalur Cadangan (API Polling)
+setInterval(async () => {
+    if (isRedirecting) return;
+    try {
+        const res = await fetch('/api/esp/state');
+        const data = await res.json();
+        
+        // Cek jika status di DB adalah menunggu kartu (peminjaman)
+        if (data.mode === 'wait' && data.book) {
+            handleLogic('rfid/ui/detail', data.book);
+        } 
+        // Cek jika status di DB adalah konfirmasi (pengembalian)
+        else if (data.mode === 'return_confirm' && data.book) {
+            handleLogic('rfid/ui/redirect_return', data.book);
+        }
+    } catch (e) {}
+}, 2000);
+
+function handleLogic(topic, data) {
+    if (isRedirecting) return;
+    
+    // ATURAN KRUSIAL: Gunakan key 'trx_buku' untuk SEMUA jenis transaksi agar halaman konfirmasi bisa membaca
+    const storageData = {
+        judul: data.judul || data.judul_koleksi || data.title,
+        peminjam_saat_ini: data.peminjam_saat_ini || 'Anggota',
+        tanggal_pinjam: data.tanggal_pinjam || new Date().toISOString(),
+        barcode: data.barcode || data.kode_eksemplar
+    };
+
+    localStorage.setItem('trx_buku', JSON.stringify(storageData));
+    isRedirecting = true;
+    loading.style.display = 'flex';
+
+    setTimeout(() => {
+        if (topic === 'rfid/ui/detail') {
+            window.location.href = "/transaksi/detail-buku";
+        } else {
+            window.location.href = "/transaksi/konfirmasi-kembali";
+        }
+    }, 500); // Beri waktu browser menyimpan storage
+}
+
+input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !isRedirecting) {
+        const kode = input.value.trim();
+        if (!kode) return;
+        loading.style.display = 'flex';
+        // Kirim barcode ke Laravel melalui API (bukan MQTT langsung agar DB terupdate)
+        fetch('/api/esp/scan-buku', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ barcode: kode })
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === 'tidak_ditemukan') {
+                alert("Buku tidak terdaftar!");
+                loading.style.display = 'none';
+                input.value = '';
+            } else {
+                handleLogic(res.status === 'ok' ? 'rfid/ui/detail' : 'rfid/ui/redirect_return', res.book);
+            }
+        });
+    }
+});
+
+// Auto Focus
+document.addEventListener("click", () => input.focus());
+</script>
+</body>
+</html>
+
