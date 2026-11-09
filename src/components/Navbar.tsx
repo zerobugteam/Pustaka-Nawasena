@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { useState } from 'react';
-import { Menu, X, Instagram, Youtube } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X, Instagram, Youtube, Calendar } from 'lucide-react';
 
 // Icon X (Twitter) resmi dari pustaka Shadcn UI Icons
 function XTwitterIcon({ className }: { className?: string }) {
@@ -23,6 +23,36 @@ function XTwitterIcon({ className }: { className?: string }) {
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Live Clock & Date WIB (Khusus di Menu Koleksi /katalog)
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    if (pathname !== '/katalog') return;
+
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      setCurrentDate(now.toLocaleDateString('id-ID', options));
+      setCurrentTime(
+        now.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        }) + ' WIB'
+      );
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [pathname]);
 
   const navLinks = [
     { href: '/', label: 'Beranda' },
@@ -60,6 +90,18 @@ export default function Navbar() {
                 </p>
               </div>
             </Link>
+
+            {/* Waktu Sistem Real-time (Hanya muncul saat berada di menu Koleksi /katalog) */}
+            {pathname === '/katalog' && (
+              <div className="hidden md:flex items-center gap-2.5 bg-black/15 hover:bg-black/25 text-white px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/25 text-xs shadow-inner transition-all">
+                <Calendar className="w-3.5 h-3.5 text-white/90 shrink-0" />
+                <div className="leading-tight flex items-center gap-2">
+                  <span className="font-medium text-white/95">{currentDate}</span>
+                  <span className="text-white/40 font-bold">•</span>
+                  <span className="font-mono font-bold text-amber-200 drop-shadow-2xs">{currentTime}</span>
+                </div>
+              </div>
+            )}
 
             {/* Sisi Kanan: Ikon Media Sosial & Tombol Menu Mobile (Persis baris 309-346) */}
             <div className="flex items-center gap-3">

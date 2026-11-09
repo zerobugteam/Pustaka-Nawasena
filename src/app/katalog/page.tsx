@@ -12,8 +12,6 @@ import {
   Filter,
   CheckCircle2,
   Clock,
-  ChevronRight,
-  Calendar,
   Layers,
   X
 } from 'lucide-react';
@@ -27,34 +25,6 @@ export default function KatalogPage() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Live Clock & Date WIB (Sesuai user/koleksi.blade.php)
-  const [currentTime, setCurrentTime] = useState('');
-  const [currentDate, setCurrentDate] = useState('');
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      };
-      setCurrentDate(now.toLocaleDateString('id-ID', options));
-      setCurrentTime(
-        now.toLocaleTimeString('id-ID', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }) + ' WIB'
-      );
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
   }, []);
 
   // Kunci scroll halaman ketika popup detail buku terbuka agar paten di posisi tengah
@@ -96,53 +66,29 @@ export default function KatalogPage() {
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* ======================================================== */}
-        {/* SUB-HEADER INFORMASI & JAM DIGITAL (TEMA ORANGE NAWASENA) */}
+        {/* SUB-HEADER INFORMASI KOLEKSI PUSTAKA                     */}
         {/* ======================================================== */}
-        <div className="bg-white border-t-4 border-orange-500 border-x border-b border-orange-100 rounded-xl p-4 sm:p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="space-y-1 w-full md:w-auto">
-            <nav className="flex flex-wrap items-center gap-1.5 text-[11px] font-bold text-orange-400 uppercase tracking-wider">
-              <span className="text-slate-400">Layanan Elektronik</span>
-              <ChevronRight className="w-3 h-3 text-slate-300" />
-              <span className="text-orange-600">Katalog Pustaka</span>
-            </nav>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        <div className="bg-white border-t-4 border-orange-500 border-x border-b border-orange-100 rounded-xl p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Pustaka <span className="text-orange-500 font-bold">Nawasena</span>
             </h1>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-500/10 border border-orange-500/20 rounded-md text-orange-800 font-bold uppercase tracking-wider text-[10px] mt-1 shadow-sm">
-              <MapPin className="w-3 h-3 text-orange-500" />
+            <p className="text-xs sm:text-sm font-semibold text-slate-500 flex items-center gap-1.5 pt-0.5">
+              <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
               <span>Bakorwil III Malang</span>
-            </div>
+            </p>
           </div>
 
-          {/* Widget Waktu & Statistik */}
-          <div className="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 self-stretch md:self-auto">
-            {/* Live Jam & Tanggal */}
-            <div className="bg-orange-50/50 border border-orange-100 rounded-lg px-4 py-2.5 flex items-center gap-3 flex-1 sm:flex-none">
-              <Calendar className="w-4 h-4 text-orange-500 hidden sm:block" />
-              <div className="leading-tight">
-                <div className="text-[10px] font-bold text-orange-400 uppercase tracking-wider">
-                  Waktu Sistem
-                </div>
-                <div className="text-xs font-semibold text-slate-700">
-                  <span>{currentDate || 'Memuat tanggal...'}</span> —{' '}
-                  <span className="font-mono text-orange-600 font-bold">
-                    {currentTime || '00:00:00 WIB'}
-                  </span>
-                </div>
-              </div>
+          {/* Counter Jumlah Data */}
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 border border-orange-600 rounded-xl px-5 py-3 flex flex-col justify-center text-center sm:text-left min-w-[130px] shadow-md shadow-orange-500/20 text-white">
+            <div className="text-[11px] font-bold text-orange-100 uppercase tracking-wider">
+              Total Koleksi
             </div>
-
-            {/* Counter Jumlah Data */}
-            <div className="bg-orange-500 border border-orange-600 rounded-lg px-4 py-2.5 flex flex-col justify-center text-center sm:text-left min-w-[120px] shadow-sm shadow-orange-500/20 text-white">
-              <div className="text-[10px] font-bold text-orange-100 uppercase tracking-wider">
-                Total Koleksi
-              </div>
-              <div className="text-lg font-black tracking-tight font-mono">
-                {filteredBooks.length}{' '}
-                <span className="text-[11px] font-medium text-orange-200 uppercase tracking-normal">
-                  Item
-                </span>
-              </div>
+            <div className="text-2xl font-black tracking-tight font-mono leading-none mt-1">
+              {filteredBooks.length}{' '}
+              <span className="text-xs font-semibold text-orange-200 uppercase tracking-normal">
+                Item
+              </span>
             </div>
           </div>
         </div>
