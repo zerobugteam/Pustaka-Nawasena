@@ -1,0 +1,10 @@
+import { createNawasenaOgImage, OG_ALT, OG_SIZE } from '@/utils/ogImage';
+
+export const alt = OG_ALT;
+export const size = OG_SIZE;
+export const contentType = 'image/png';
+
+export default function OpenGraphImage() {
+  return createNawasenaOgImage();
+}
+
