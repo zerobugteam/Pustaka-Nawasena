@@ -18,11 +18,25 @@ export default function Template({ children }: { children: React.ReactNode }) {
       rootMargin: '0px 0px -40px 0px',
     });
 
-    const elements = document.querySelectorAll('[data-aos]');
-    elements.forEach((el) => observer.observe(el));
+    const observeAll = () => {
+      document.querySelectorAll('[data-aos]:not(.aos-animate)').forEach((el) => {
+        observer.observe(el);
+      });
+    };
+
+    observeAll();
+
+    const mutationObserver = new MutationObserver(() => {
+      observeAll();
+    });
+
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
 
     return () => {
-      elements.forEach((el) => observer.unobserve(el));
+      mutationObserver.disconnect();
       observer.disconnect();
     };
   }, []);

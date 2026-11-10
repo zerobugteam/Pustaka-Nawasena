@@ -132,11 +132,13 @@ export default function Navbar() {
                 </a>
               </div>
 
-              {/* Hamburger Button untuk Tampilan Mobile (Persis baris 336-344) */}
+              {/* Hamburger Button (Hanya untuk Mobile/Tablet) */}
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-1.5 rounded-lg text-white hover:bg-white/20 transition-colors"
+                className="lg:hidden p-1.5 rounded-lg text-white hover:bg-white/20 active:scale-95 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Toggle navigation menu"
+                aria-expanded={mobileMenuOpen}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -146,36 +148,38 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu (Smooth Accordion) */}
+        {/* Dropdown Menu Navigasi (Hanya Mobile/Tablet, Smooth Accordion) */}
         <div
           className={`lg:hidden grid transition-all duration-300 ease-out ${
             mobileMenuOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
           }`}
         >
           <div className="overflow-hidden">
-            <div className="border-t border-orange-400 bg-[#f9ad16] px-4 pt-3 pb-4 space-y-2 text-white">
-              {navLinks.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
-                      isActive
-                        ? 'bg-white text-orange-600 shadow-sm'
-                        : item.highlight
-                        ? 'bg-orange-600 text-white font-bold'
-                        : 'text-white hover:bg-white/20'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
+            <div className="border-t border-orange-400 bg-[#f9ad16] px-4 sm:px-6 lg:px-8 pt-3 pb-4 text-white">
+              <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end gap-2">
+                {navLinks.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+                        isActive
+                          ? 'bg-white text-orange-600 shadow-sm'
+                          : item.highlight
+                          ? 'bg-orange-600 text-white font-bold hover:bg-orange-700'
+                          : 'text-white hover:bg-white/20'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
 
               {/* Social Links di Mobile Dropdown */}
-              <div className="sm:hidden flex items-center gap-3 pt-2 mt-2 border-t border-white/25">
+              <div className="sm:hidden flex items-center gap-3 pt-3 mt-3 border-t border-white/25">
                 <a
                   href="https://x.com/Bakorwil3Malang?t=-6lq7bvn2jxresCEdaN1Qg&s=08"
                   target="_blank"

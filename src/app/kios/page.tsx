@@ -8,7 +8,7 @@ import KioskDisplay from '@/components/kios/KioskDisplay';
 import HardwareSimulator from '@/components/kios/HardwareSimulator';
 import PrintReceiptModal from '@/components/kios/PrintReceiptModal';
 import { playBuzzerBeep, playVoicePrompt, DFPLAYER_TRACKS } from '@/utils/soundEffects';
-import { EyeOff, SlidersHorizontal } from 'lucide-react';
+import { EyeOff, SlidersHorizontal, Menu, X } from 'lucide-react';
 
 export default function KiosPage() {
   const [books, setBooks] = useState<Book[]>(INITIAL_BOOKS);
@@ -17,7 +17,17 @@ export default function KiosPage() {
   const [lastTransaction, setLastTransaction] = useState<Transaction | null>(null);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [showSimulator, setShowSimulator] = useState<boolean>(true);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [showReceipt, setShowReceipt] = useState<boolean>(false);
+
+  const navLinks = [
+    { href: '/', label: 'Beranda' },
+    { href: '/katalog', label: 'Koleksi' },
+    { href: '/fasilitas', label: 'Fasilitas' },
+    { href: '/kios', label: 'Kios IoT', active: true },
+    { href: '/login', label: 'Login' },
+    { href: '/admin', label: 'Dashboard Admin' },
+  ];
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Jam & Tanggal Real-time (Sesuai Top Bar Kios 05_kios_scan_barcode.html)
@@ -362,6 +372,47 @@ export default function KiosPage() {
                 {dateText}
               </div>
             </div>
+
+            <span className="w-px h-6 bg-slate-200 lg:hidden" aria-hidden="true" />
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+              className="lg:hidden inline-flex items-center justify-center p-1.5 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:scale-95 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
+            >
+              {menuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Dropdown Menu Navigasi Kios (Hanya Mobile/Tablet, Smooth Accordion) */}
+        <div
+          className={`lg:hidden grid transition-all duration-300 ease-out ${
+            menuOpen ? 'grid-rows-[1fr] opacity-100 mt-2.5' : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+          }`}
+        >
+          <div className="overflow-hidden">
+            <nav
+              aria-label="Navigasi Halaman"
+              className="max-w-7xl mx-auto pt-2.5 border-t border-slate-200 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end gap-1.5 sm:gap-2"
+            >
+              {navLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+                    item.active
+                      ? 'bg-orange-600 text-white shadow-sm'
+                      : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       </header>
