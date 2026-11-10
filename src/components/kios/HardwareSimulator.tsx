@@ -1,7 +1,17 @@
 'use client';
 
+import { useState } from 'react';
 import { IotState, Member, Book } from '@/types';
-import { Cpu, Radio, CreditCard, Barcode, Volume2, Sparkles, RefreshCcw } from 'lucide-react';
+import {
+  Barcode,
+  CreditCard,
+  Volume2,
+  VolumeX,
+  RotateCcw,
+  ChevronDown,
+  ArrowRight,
+  Monitor,
+} from 'lucide-react';
 import { playBuzzerBeep, playVoicePrompt, DFPLAYER_TRACKS } from '@/utils/soundEffects';
 
 interface HardwareSimulatorProps {
@@ -25,16 +35,18 @@ export default function HardwareSimulator({
   soundEnabled,
   setSoundEnabled,
 }: HardwareSimulatorProps) {
+  const [showLogs, setShowLogs] = useState(false);
 
-  // Pemetaan warna LED RGB fisik
-  const ledStyles: Record<string, string> = {
-    biru: 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.9)]',
-    hijau: 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.9)] animate-pulse',
-    kuning: 'bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.9)]',
-    cyan: 'bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.9)]',
-    merah: 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.9)] animate-ping',
-    putih: 'bg-slate-100 shadow-[0_0_15px_rgba(241,245,249,0.9)]',
+  const ledLabelMap: Record<string, { badgeClass: string; label: string }> = {
+    biru: { badgeClass: 'bg-slate-100 text-slate-700', label: 'Siaga' },
+    hijau: { badgeClass: 'bg-emerald-50 text-emerald-700', label: 'Siap' },
+    kuning: { badgeClass: 'bg-amber-50 text-amber-700', label: 'Pengembalian' },
+    cyan: { badgeClass: 'bg-sky-50 text-sky-700', label: 'Tervalidasi' },
+    merah: { badgeClass: 'bg-rose-50 text-rose-700', label: 'Galat' },
+    putih: { badgeClass: 'bg-slate-100 text-slate-700', label: 'Siaga' },
   };
+
+  const activeLed = ledLabelMap[iotState.ledColor] || ledLabelMap.biru;
 
   const handleCardClick = (member: Member) => {
     if (soundEnabled) {
@@ -56,183 +68,195 @@ export default function HardwareSimulator({
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl text-slate-100">
-      {/* Header Panel */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <Cpu className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-sm text-white flex items-center gap-1.5">
-              Simulator Hardware IoT ESP32
-              <span className="text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/40">
-                Connected
-              </span>
-            </h3>
-            <p className="text-[11px] text-slate-400">NodeMCU ESP32 • MFRC522 • DFPlayer Mini • LCD 16x2</p>
-          </div>
+    <section
+      aria-label="Panel Uji Simulasi Perangkat Kios"
+      className="bg-white/95 backdrop-blur-sm border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl w-full max-w-5xl mx-auto space-y-6 transition-all duration-300 ease-out"
+    >
+      {/* Header Clean */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-base font-bold text-slate-900 tracking-tight">
+            Simulasi Perangkat Kios
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Uji pemindaian barcode buku dan kartu anggota secara langsung
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className={`p-1.5 rounded-lg border text-xs flex items-center gap-1.5 transition-colors ${
-              soundEnabled
-                ? 'bg-sky-500/20 border-sky-500/40 text-sky-300'
-                : 'bg-slate-800 border-slate-700 text-slate-400'
-            }`}
-            title="Aktifkan Suara Audio Guidance & Buzzer"
-          >
-            <Volume2 className="w-3.5 h-3.5" />
-            <span className="text-[11px] hidden sm:inline">{soundEnabled ? 'Audio On' : 'Audio Mute'}</span>
-          </button>
-
-          <button
-            onClick={onResetSystem}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs flex items-center gap-1 transition-colors"
-            title="Reset State Mesin ke Standby"
-          >
-            <RefreshCcw className="w-3.5 h-3.5" />
-            <span className="text-[11px] hidden sm:inline">Reset</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Komponen Visual: LCD 16x2 & Indikator LED */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-4">
-        {/* LCD 16x2 I2C Display */}
-        <div className="md:col-span-3 bg-emerald-950/90 border-2 border-emerald-700/80 rounded-xl p-3 shadow-inner">
-          <div className="flex items-center justify-between text-[10px] uppercase font-mono text-emerald-400/80 pb-1 mb-1 border-b border-emerald-800/40">
-            <span>LCD 16x2 (I2C: 0x27)</span>
-            <span className="animate-pulse">● HD44780 ACTIVE</span>
-          </div>
-          <div className="bg-emerald-900/60 border border-emerald-700/50 rounded-lg p-2.5 font-mono text-emerald-300 text-sm tracking-wider">
-            <div className="lcd-font uppercase font-bold truncate h-6">
-              {iotState.lcdMessageLine1 || ' NAWASENA SMART '}
-            </div>
-            <div className="lcd-font uppercase font-semibold text-emerald-400/90 truncate h-6">
-              {iotState.lcdMessageLine2 || 'BAKORWIL III MLG'}
-            </div>
-          </div>
-        </div>
-
-        {/* LED RGB & Buzzer Indicator */}
-        <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3 flex flex-col justify-between">
-          <div className="text-[10px] uppercase font-mono text-slate-400 pb-1 border-b border-slate-700">
-            Hardware State
-          </div>
-          <div className="flex items-center justify-around py-2">
-            <div className="flex flex-col items-center gap-1">
-              <div className={`w-6 h-6 rounded-full transition-all duration-300 ${ledStyles[iotState.ledColor] || ledStyles.biru}`} />
-              <span className="text-[9px] font-mono text-slate-400 capitalize">LED ({iotState.ledColor})</span>
-            </div>
-
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-6 h-6 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-300">
-                <Volume2 className="w-3.5 h-3.5" />
-              </div>
-              <span className="text-[9px] font-mono text-slate-400">DFPlayer</span>
-            </div>
-          </div>
-          <button
+            type="button"
             onClick={testAudio}
-            className="w-full py-1 text-[10px] font-medium text-slate-300 hover:text-white bg-slate-700/60 hover:bg-slate-700 rounded border border-slate-600 transition-colors"
+            className="px-3 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 active:scale-[0.97] transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
           >
-            Tes Suara Sambutan
+            Tes Suara
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium inline-flex items-center gap-1.5 active:scale-[0.97] transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 ${
+              soundEnabled
+                ? 'bg-orange-50 text-orange-700 hover:bg-orange-100'
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+            aria-pressed={soundEnabled}
+          >
+            {soundEnabled ? (
+              <Volume2 className="w-3.5 h-3.5" aria-hidden="true" />
+            ) : (
+              <VolumeX className="w-3.5 h-3.5" aria-hidden="true" />
+            )}
+            <span>{soundEnabled ? 'Suara Aktif' : 'Suara Mati'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onResetSystem}
+            className="px-3 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 inline-flex items-center gap-1.5 active:scale-[0.97] transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
+          >
+            <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>Reset</span>
           </button>
         </div>
       </div>
 
-      {/* Simulator Interaktif: Tap Kartu RFID & Scan Barcode */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-        {/* Virtual RFID Cards */}
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-3">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700/60">
-            <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5 text-sky-400" />
-              Simulasi Tap Kartu RFID (MFRC522)
-            </span>
-            <span className="text-[10px] text-slate-400">Klik kartu untuk men-tap</span>
-          </div>
-
-          <div className="space-y-2">
-            {members.map((member) => (
-              <button
-                key={member.id}
-                onClick={() => handleCardClick(member)}
-                className="w-full flex items-center justify-between p-2 rounded-lg bg-slate-800 hover:bg-sky-950/60 border border-slate-700 hover:border-sky-500/50 text-left transition-all group"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-700 border border-slate-600">
-                    <img src={member.avatar} alt={member.nama} className="w-full h-full object-cover" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-medium text-white group-hover:text-sky-300 transition-colors">
-                      {member.nama}
-                    </div>
-                    <div className="text-[10px] font-mono text-slate-400">
-                      UID: <span className="text-sky-400 font-bold">{member.rfidUid}</span> • {member.role}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-[10px] font-semibold text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                  <span>Tap Kartu</span>
-                  <Radio className="w-3 h-3 animate-ping" />
-                </div>
-              </button>
-            ))}
-          </div>
+      {/* Strip Status Ringkas */}
+      <div className="bg-slate-50/80 rounded-2xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2 text-slate-600">
+          <Monitor className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
+          <span className="font-semibold text-slate-800 tabular-nums">
+            {iotState.lcdMessageLine1 || 'NAWASENA SMART'} — {iotState.lcdMessageLine2 || 'BAKORWIL III MLG'}
+          </span>
         </div>
 
-        {/* Virtual Barcode Scanner */}
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-3">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700/60">
-            <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-              <Barcode className="w-3.5 h-3.5 text-emerald-400" />
-              Simulasi Pindai Barcode Buku
-            </span>
-            <span className="text-[10px] text-slate-400">Klik buku untuk scan</span>
+        <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold transition-colors duration-300 ${activeLed.badgeClass}`}>
+          {activeLed.label}
+        </span>
+      </div>
+
+      {/* Dua Kolom Clean Tanpa Card Bersarang */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Kolom 1: Pindai Barcode Buku */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Barcode className="w-4 h-4 text-orange-600" aria-hidden="true" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Pindai Barcode Buku
+            </h3>
           </div>
 
-          <div className="space-y-2 max-h-[168px] overflow-y-auto pr-1">
-            {books.slice(0, 3).map((book) => {
+          <div className="divide-y divide-slate-100">
+            {books.slice(0, 4).map((book) => {
               const isBorrowed = book.status === 'dipinjam';
               return (
                 <button
                   key={book.id}
+                  type="button"
                   onClick={() => handleBarcodeClick(book)}
-                  className="w-full flex items-center justify-between p-2 rounded-lg bg-slate-800 hover:bg-emerald-950/60 border border-slate-700 hover:border-emerald-500/50 text-left transition-all group"
+                  className="group w-full flex items-center justify-between gap-3 py-3 px-2 -mx-2 rounded-xl hover:bg-slate-50 active:scale-[0.99] text-left transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
                 >
-                  <div className="flex items-center gap-2.5 overflow-hidden">
-                    <div className="w-7 h-10 rounded bg-slate-700 overflow-hidden flex-shrink-0">
-                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-slate-800 group-hover:text-slate-950 truncate transition-colors">
+                      {book.title}
                     </div>
-                    <div className="truncate">
-                      <div className="text-xs font-medium text-white group-hover:text-emerald-300 transition-colors truncate">
-                        {book.title}
-                      </div>
-                      <div className="text-[10px] font-mono text-slate-400 truncate">
-                        Barcode: <span className="text-emerald-400 font-bold">{book.barcode}</span>
-                      </div>
+                    <div className="text-xs text-slate-400 tabular-nums mt-0.5">
+                      {book.barcode}
                     </div>
                   </div>
 
                   <span
-                    className={`text-[9px] font-semibold px-1.5 py-0.5 rounded flex-shrink-0 ${
-                      isBorrowed ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                    className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 transition-all duration-200 ${
+                      isBorrowed
+                        ? 'bg-amber-50 text-amber-700 group-hover:bg-amber-100'
+                        : 'bg-emerald-50 text-emerald-700 group-hover:bg-emerald-100'
                     }`}
                   >
-                    {isBorrowed ? 'Uji Pengembalian' : 'Uji Peminjaman'}
+                    <span>{isBorrowed ? 'Kembalikan' : 'Pinjam'}</span>
+                    <ArrowRight className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform duration-200" aria-hidden="true" />
                   </span>
                 </button>
               );
             })}
           </div>
         </div>
+
+        {/* Kolom 2: Tap Kartu Anggota */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <CreditCard className="w-4 h-4 text-orange-600" aria-hidden="true" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Tap Kartu Anggota (RFID)
+            </h3>
+          </div>
+
+          <div className="divide-y divide-slate-100">
+            {members.map((member) => (
+              <button
+                key={member.id}
+                type="button"
+                onClick={() => handleCardClick(member)}
+                className="group w-full flex items-center justify-between gap-3 py-3 px-2 -mx-2 rounded-xl hover:bg-slate-50 active:scale-[0.99] text-left transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <img
+                    src={member.avatar}
+                    alt={`Foto ${member.nama}`}
+                    width={36}
+                    height={36}
+                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-slate-200"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold text-slate-800 group-hover:text-slate-950 truncate transition-colors">
+                      {member.nama}
+                    </div>
+                    <div className="text-xs text-slate-400 tabular-nums mt-0.5 truncate">
+                      UID {member.rfidUid} — {member.role}
+                    </div>
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 group-hover:bg-orange-50 group-hover:text-orange-700 shrink-0 transition-all duration-200">
+                  <span>Tap</span>
+                  <ArrowRight className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform duration-200" aria-hidden="true" />
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Catatan Aktivitas Kios (Collapsible Smooth) */}
+      <div className="border-t border-slate-100 pt-3">
+        <button
+          type="button"
+          onClick={() => setShowLogs(!showLogs)}
+          aria-expanded={showLogs}
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 rounded"
+        >
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform duration-300 ease-out ${showLogs ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          />
+          <span>Riwayat Aktivitas ({iotState.systemLog.length})</span>
+        </button>
+
+        <div
+          className={`grid transition-all duration-300 ease-out ${
+            showLogs ? 'grid-rows-[1fr] opacity-100 mt-2.5' : 'grid-rows-[0fr] opacity-0 mt-0'
+          }`}
+        >
+          <div className="overflow-hidden">
+            <ul className="space-y-1 text-xs text-slate-500 tabular-nums max-h-36 overflow-y-auto pl-1">
+              {iotState.systemLog.map((log, index) => (
+                <li key={index} className="leading-relaxed">
+                  {log}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
-

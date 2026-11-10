@@ -76,7 +76,7 @@ export default function AdminPage() {
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
-                <div className="text-3xl font-black text-slate-900 font-mono">{card.value}</div>
+                <div className="text-3xl font-black text-slate-900 tabular-nums">{card.value}</div>
               </div>
             );
           })}
@@ -137,14 +137,14 @@ export default function AdminPage() {
                 <tbody className="divide-y divide-slate-100">
                   {transactions.map((trx) => (
                     <tr key={trx.id} className="hover:bg-orange-50/30 transition-colors">
-                      <td className="p-4 font-mono font-bold text-orange-600">{trx.transactionCode}</td>
+                      <td className="p-4 tabular-nums font-bold text-orange-600">{trx.transactionCode}</td>
                       <td className="p-4">
                         <div className="font-semibold text-slate-900">{trx.bookTitle}</div>
-                        <div className="font-mono text-slate-400 text-[10px]">{trx.bookBarcode}</div>
+                        <div className="tabular-nums text-slate-400 text-[10px]">{trx.bookBarcode}</div>
                       </td>
                       <td className="p-4">
                         <div className="font-medium text-slate-900">{trx.memberName}</div>
-                        <div className="font-mono text-slate-400 text-[10px]">UID: {trx.memberUid}</div>
+                        <div className="tabular-nums text-slate-400 text-[10px]">UID: {trx.memberUid}</div>
                       </td>
                       <td className="p-4 text-slate-600">{trx.tanggalPinjam}</td>
                       <td className="p-4 text-slate-600">{trx.tenggatKembali}</td>
@@ -191,8 +191,8 @@ export default function AdminPage() {
                         <div className="font-bold text-slate-900">{b.title}</div>
                         <div className="text-slate-500 text-[11px]">{b.author} • {b.publisher} ({b.year})</div>
                       </td>
-                      <td className="p-4 font-mono font-medium text-slate-800">{b.kodeEksemplar}</td>
-                      <td className="p-4 font-mono font-bold text-orange-600">{b.barcode}</td>
+                      <td className="p-4 tabular-nums font-medium text-slate-800">{b.kodeEksemplar}</td>
+                      <td className="p-4 tabular-nums font-bold text-orange-600">{b.barcode}</td>
                       <td className="p-4">{b.category}</td>
                       <td className="p-4">
                         <span
@@ -240,8 +240,8 @@ export default function AdminPage() {
                           <div className="text-slate-400 text-[11px]">{m.email}</div>
                         </div>
                       </td>
-                      <td className="p-4 font-mono text-slate-700">{m.nikNip}</td>
-                      <td className="p-4 font-mono font-bold text-orange-600">{m.rfidUid}</td>
+                      <td className="p-4 tabular-nums text-slate-700">{m.nikNip}</td>
+                      <td className="p-4 tabular-nums font-bold text-orange-600">{m.rfidUid}</td>
                       <td className="p-4 font-medium text-slate-700">{m.role}</td>
                       <td className="p-4">
                         <span className="px-2.5 py-1 rounded-full font-bold text-[10px] uppercase bg-emerald-100 text-emerald-800">

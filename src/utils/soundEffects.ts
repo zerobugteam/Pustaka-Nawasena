@@ -32,7 +32,8 @@ export function playVoicePrompt(text: string) {
 
     window.speechSynthesis.cancel(); // Hentikan suara sebelumnya
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const spokenText = text.replace(/\bRFID\b/gi, 'R, F, I, D');
+    const utterance = new SpeechSynthesisUtterance(spokenText);
     utterance.lang = 'id-ID';
     utterance.rate = 1.0;
     utterance.pitch = 1.1;
@@ -52,7 +53,7 @@ export function playVoicePrompt(text: string) {
 
 export const DFPLAYER_TRACKS = {
   BOOT: 'Selamat datang di Sistem Perpustakaan Cerdas Nawasena, Bakorwil Tiga Malang.',
-  SCAN_MEMBER: 'Silakan tempelkan kartu anggota Anda pada pemindai RFID.',
+  SCAN_MEMBER: 'Silakan tempelkan kartu anggota Anda pada pemindai R, F, I, D.',
   MEMBER_VALID: 'Kartu anggota terverifikasi. Silakan periksa detail transaksi pada layar.',
   ERROR_REJECTED: 'Mohon maaf, akses ditolak atau kartu tidak terdaftar. Silakan coba lagi.',
   SUCCESS_BORROW: 'Peminjaman buku berhasil diselesaikan. Terima kasih telah menggunakan Pustaka Nawasena.',

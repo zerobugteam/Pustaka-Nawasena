@@ -22,7 +22,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     pathname.startsWith('/admin');
 
   if (isStandalone) {
-    return <main className="min-h-screen w-full">{children}</main>;
+    return <main className="min-h-screen w-full print:hidden">{children}</main>;
   }
 
   return (

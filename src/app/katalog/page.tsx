@@ -84,7 +84,7 @@ export default function KatalogPage() {
             <div className="text-[11px] font-bold text-orange-100 uppercase tracking-wider">
               Total Koleksi
             </div>
-            <div className="text-2xl font-black tracking-tight font-mono leading-none mt-1">
+            <div className="text-2xl font-black tracking-tight tabular-nums leading-none mt-1">
               {filteredBooks.length}{' '}
               <span className="text-xs font-semibold text-orange-200 uppercase tracking-normal">
                 Item
@@ -162,7 +162,7 @@ export default function KatalogPage() {
               >
                 {/* Header Card Status & Kode Eksemplar */}
                 <div className="bg-slate-50 border-b border-slate-100 px-4 py-2.5 flex items-center justify-between text-[11px]">
-                  <span className="font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded text-[10px]">
+                  <span className="tabular-nums font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded text-[10px]">
                     {book.kodeEksemplar}
                   </span>
                   <span
@@ -284,7 +284,7 @@ export default function KatalogPage() {
                   <p className="text-xs text-slate-500">
                     Penerbit: <strong className="text-slate-700">{selectedBook.publisher}</strong> ({selectedBook.year})
                   </p>
-                  <div className="pt-2 text-xs font-mono text-slate-600 space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                  <div className="pt-2 text-xs tabular-nums text-slate-600 space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
                     <div>ISBN: <span className="font-bold text-slate-800">{selectedBook.isbn}</span></div>
                     <div>Barcode: <span className="font-bold text-orange-600">{selectedBook.barcode}</span></div>
                     <div>No. Panggil: <span className="font-bold text-slate-800">{selectedBook.callNumber}</span></div>

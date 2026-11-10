@@ -405,11 +405,11 @@ export default function HomePage() {
             Jumlah Koleksi
           </h5>
           <div className="flex justify-center items-center gap-8 sm:gap-16" data-aos="fade-up">
-            <div className="text-center font-bold text-xl sm:text-2xl text-emerald-600 font-mono">
+            <div className="text-center font-bold text-xl sm:text-2xl text-emerald-600 tabular-nums">
               {totalTitles} Jilid
             </div>
             <div className="w-px h-8 bg-slate-200" />
-            <div className="text-center font-bold text-xl sm:text-2xl text-emerald-600 font-mono">
+            <div className="text-center font-bold text-xl sm:text-2xl text-emerald-600 tabular-nums">
               {totalCopies} Eksemplar
             </div>
           </div>

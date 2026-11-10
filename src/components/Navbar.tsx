@@ -4,21 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { Menu, X, Instagram, Youtube, Calendar } from 'lucide-react';
-
-// Icon X (Twitter) resmi dari pustaka Shadcn UI Icons
-function XTwitterIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
+import { Menu, X, Instagram, Youtube, Twitter, Calendar } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -98,7 +84,7 @@ export default function Navbar() {
                 <div className="leading-tight flex items-center gap-2">
                   <span className="font-medium text-white/95">{currentDate}</span>
                   <span className="text-white/40 font-bold">•</span>
-                  <span className="font-mono font-bold text-amber-200 drop-shadow-2xs">{currentTime}</span>
+                  <span className="tabular-nums font-bold text-amber-200 drop-shadow-2xs">{currentTime}</span>
                 </div>
               </div>
             )}
@@ -116,7 +102,7 @@ export default function Navbar() {
                   title="Twitter / X"
                   className="w-9 h-9 rounded-full bg-white text-zinc-800 hover:text-black hover:bg-zinc-50 hover:scale-105 active:scale-95 transition-all flex items-center justify-center shadow-sm group"
                 >
-                  <XTwitterIcon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Twitter className="w-4 h-4 transition-transform group-hover:scale-110" />
                 </a>
 
                 {/* YouTube */}
