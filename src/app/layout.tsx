@@ -24,12 +24,19 @@ export const metadata: Metadata = {
     title: 'Pustaka Nawasena — Perpustakaan Cerdas Bakorwil III Malang',
     description:
       'Akses katalog koleksi khusus, layanan riset kebijakan, dan kios peminjaman mandiri berbasis IoT di Bakorwil III Malang.',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        alt: 'Pustaka Nawasena Bakorwil III Malang',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Pustaka Nawasena — Perpustakaan Cerdas Bakorwil III Malang',
     description:
       'Akses katalog koleksi khusus, layanan riset kebijakan, dan kios peminjaman mandiri berbasis IoT di Bakorwil III Malang.',
+    images: ['/images/og-image.jpg'],
   },
 };
 
