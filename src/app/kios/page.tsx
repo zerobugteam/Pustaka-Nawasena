@@ -296,12 +296,12 @@ export default function KiosPage() {
       }}
     >
       {/* Top Bar Resmi Kios Mandiri */}
-      <header className="bg-white border-b-4 border-amber-700 px-4 sm:px-8 py-3 shadow-md">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <header className="bg-white border-b-4 border-amber-700 px-3 sm:px-8 py-2.5 sm:py-3 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Logo & Brand */}
           <Link
             href="/"
-            className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 rounded-lg"
+            className="flex items-center gap-2 sm:gap-3 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 rounded-lg"
             title="Pustaka Nawasena"
           >
             <img
@@ -309,43 +309,45 @@ export default function KiosPage() {
               alt="Logo Pustaka Nawasena"
               width={36}
               height={36}
-              className="h-9 w-auto object-contain"
+              className="h-8 sm:h-9 w-auto object-contain shrink-0"
             />
-            <span className="w-px h-7 bg-slate-200" aria-hidden="true" />
+            <span className="w-px h-6 sm:h-7 bg-slate-200 shrink-0" aria-hidden="true" />
             <img
               src="/images/bakorwil.png"
               alt="Logo Bakorwil III Malang"
               width={36}
               height={36}
-              className="h-9 w-auto object-contain"
+              className="h-8 sm:h-9 w-auto object-contain shrink-0"
             />
-            <div className="pl-1">
-              <h1 className="text-slate-900 font-black text-base sm:text-lg leading-none tracking-tight">
+            <div className="pl-0.5 sm:pl-1 min-w-0">
+              <h1 className="text-slate-900 font-black text-sm sm:text-lg leading-none tracking-tight truncate">
                 NAWASENA
               </h1>
-              <p className="text-amber-700 text-[10px] font-bold uppercase tracking-widest mt-0.5">
+              <p className="text-amber-700 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-widest mt-0.5 truncate">
                 Layanan Mandiri
               </p>
             </div>
           </Link>
 
           {/* Tombol Clean Toggle Panel Uji & Jam Digital Kios */}
-          <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+          <div className="flex items-center gap-2 sm:gap-4 ml-auto shrink-0">
             <button
               type="button"
               onClick={() => setShowSimulator((prev) => !prev)}
               aria-expanded={showSimulator}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 active:scale-[0.97] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 active:scale-[0.97] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
             >
               {showSimulator ? (
                 <>
-                  <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>Sembunyikan Uji</span>
+                  <EyeOff className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span className="hidden sm:inline">Sembunyikan Uji</span>
+                  <span className="sm:hidden">Tutup Uji</span>
                 </>
               ) : (
                 <>
-                  <SlidersHorizontal className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>Panel Uji</span>
+                  <SlidersHorizontal className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span className="hidden sm:inline">Panel Uji</span>
+                  <span className="sm:hidden">Uji</span>
                 </>
               )}
             </button>
@@ -353,10 +355,10 @@ export default function KiosPage() {
             <span className="w-px h-6 bg-slate-200 hidden sm:block" aria-hidden="true" />
 
             <div className="text-right">
-              <div className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums leading-none">
+              <div className="text-sm sm:text-2xl font-black text-slate-900 tracking-tight tabular-nums leading-none">
                 {clockText}
               </div>
-              <div className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-1">
+              <div className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider mt-0.5 sm:mt-1 hidden sm:block">
                 {dateText}
               </div>
             </div>
@@ -365,7 +367,7 @@ export default function KiosPage() {
       </header>
 
       {/* Konten Utama Kios */}
-      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col justify-center">
+      <main className="flex-1 px-3 sm:px-6 lg:px-8 py-5 sm:py-10 flex flex-col justify-center">
         <KioskDisplay
           iotState={iotState}
           errorMessage={errorMessage}

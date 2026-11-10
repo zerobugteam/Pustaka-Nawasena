@@ -80,7 +80,7 @@ export default function KatalogPage() {
           </div>
 
           {/* Counter Jumlah Data */}
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 border border-orange-600 rounded-xl px-5 py-3 flex flex-col justify-center text-center sm:text-left min-w-[130px] shadow-md shadow-orange-500/20 text-white">
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 border border-orange-600 rounded-xl px-5 py-3 flex flex-col justify-center text-center sm:text-left w-full sm:w-auto min-w-[130px] shadow-md shadow-orange-500/20 text-white">
             <div className="text-[11px] font-bold text-orange-100 uppercase tracking-wider">
               Total Koleksi
             </div>
@@ -134,8 +134,9 @@ export default function KatalogPage() {
             {categories.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all duration-200 ease-out active:scale-[0.97] cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-orange-500 text-white shadow-sm shadow-orange-500/20'
                     : 'bg-orange-50 text-orange-800 hover:bg-orange-100 border border-orange-100'
@@ -148,17 +149,25 @@ export default function KatalogPage() {
         </div>
 
         {/* ======================================================== */}
-        {/* BOOK GRID CARD LAYOUT                                     */}
+        {/* BOOK GRID CARD LAYOUT (SMOOTH TRANSITION)                */}
         {/* ======================================================== */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredBooks.map((book, idx) => {
+        {filteredBooks.length === 0 ? (
+          <div className="bg-white border border-slate-200 rounded-xl p-10 text-center space-y-2 animate-kiosk-enter">
+            <BookOpen className="w-8 h-8 text-slate-300 mx-auto" aria-hidden="true" />
+            <p className="text-sm font-semibold text-slate-700">Koleksi tidak ditemukan</p>
+            <p className="text-xs text-slate-500">Coba ubah kata kunci pencarian atau pilih kategori lain.</p>
+          </div>
+        ) : (
+        <div
+          key={`${selectedCategory}-${searchQuery}`}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 animate-kiosk-enter"
+        >
+          {filteredBooks.map((book) => {
             const isAvailable = book.status === 'tersedia';
             return (
               <div
                 key={book.id}
-                data-aos="fade-up"
-                data-aos-delay={(idx % 3) * 100}
-                className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-orange-300 transition-all duration-200 flex flex-col justify-between group"
+                className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-orange-300 transition-all duration-250 ease-out flex flex-col justify-between group"
               >
                 {/* Header Card Status & Kode Eksemplar */}
                 <div className="bg-slate-50 border-b border-slate-100 px-4 py-2.5 flex items-center justify-between text-[11px]">
@@ -219,8 +228,8 @@ export default function KatalogPage() {
                 </div>
 
                 {/* Footer Card */}
-                <div className="bg-orange-50/30 border-t border-orange-100 px-4 py-2.5 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1 text-[11px] text-slate-500 truncate max-w-[180px]">
+                <div className="bg-orange-50/30 border-t border-orange-100 px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-1 text-[11px] text-slate-500 min-w-0 flex-1">
                     <MapPin className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                     <span className="truncate">{book.location}</span>
                   </div>
@@ -236,6 +245,7 @@ export default function KatalogPage() {
             );
           })}
         </div>
+        )}
 
         {/* ======================================================== */}
         {/* MODAL DETAIL BUKU (PATEN TEPAT DI TENGAH LAYAR & SMOOTH)  */}
@@ -301,9 +311,9 @@ export default function KatalogPage() {
               </div>
 
               {/* Lokasi Rak */}
-              <div className="p-3 bg-orange-50/70 border border-orange-200 rounded-xl text-xs sm:text-sm flex justify-between items-center">
+              <div className="p-3 bg-orange-50/70 border border-orange-200 rounded-xl text-xs sm:text-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <span className="text-slate-700 font-medium">Lokasi Rak Koleksi:</span>
-                <strong className="text-orange-700 font-bold bg-white px-2.5 py-1 rounded-md border border-orange-200 shadow-2xs">
+                <strong className="text-orange-700 font-bold bg-white px-2.5 py-1 rounded-md border border-orange-200 shadow-2xs self-start sm:self-auto">
                   {selectedBook.location}
                 </strong>
               </div>

@@ -16,7 +16,8 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Calendar,
-  MapPin
+  MapPin,
+  CircleUserRound
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -118,12 +119,12 @@ export default function AdminPage() {
 
         {/* TAB 1: TRANSAKSI */}
         {activeTab === 'transaksi' && (
-          <div className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden">
+          <div key="tab-transaksi" className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden animate-kiosk-enter">
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-sm sm:text-base">Daftar Transaksi Peminjaman & Pengembalian</h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-600">
+              <table className="w-full min-w-[680px] text-left text-xs text-slate-600">
                 <thead className="bg-orange-50/60 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-orange-100">
                   <tr>
                     <th className="p-4">Kode Transaksi</th>
@@ -169,12 +170,12 @@ export default function AdminPage() {
 
         {/* TAB 2: BUKU */}
         {activeTab === 'buku' && (
-          <div className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden">
+          <div key="tab-buku" className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden animate-kiosk-enter">
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-sm sm:text-base">Koleksi Eksemplar & Barcode</h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-600">
+              <table className="w-full min-w-[680px] text-left text-xs text-slate-600">
                 <thead className="bg-orange-50/60 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-orange-100">
                   <tr>
                     <th className="p-4">Buku & Pengarang</th>
@@ -215,12 +216,12 @@ export default function AdminPage() {
 
         {/* TAB 3: ANGGOTA */}
         {activeTab === 'anggota' && (
-          <div className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden">
+          <div key="tab-anggota" className="bg-white border border-orange-100 rounded-xl shadow-sm overflow-hidden animate-kiosk-enter">
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-bold text-slate-900 text-sm sm:text-base">Daftar Anggota & Kartu RFID</h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-600">
+              <table className="w-full min-w-[680px] text-left text-xs text-slate-600">
                 <thead className="bg-orange-50/60 text-slate-700 font-bold uppercase tracking-wider text-[11px] border-b border-orange-100">
                   <tr>
                     <th className="p-4">Anggota</th>
@@ -234,7 +235,7 @@ export default function AdminPage() {
                   {members.map((m) => (
                     <tr key={m.id} className="hover:bg-orange-50/30 transition-colors">
                       <td className="p-4 flex items-center gap-3">
-                        <img src={m.avatar} alt={m.nama} className="w-8 h-8 rounded-full object-cover border border-slate-200" />
+                        <CircleUserRound className="w-8 h-8 text-slate-400 shrink-0" strokeWidth={1.6} aria-hidden="true" />
                         <div>
                           <div className="font-bold text-slate-900">{m.nama}</div>
                           <div className="text-slate-400 text-[11px]">{m.email}</div>

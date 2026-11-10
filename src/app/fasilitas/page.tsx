@@ -187,8 +187,8 @@ export default function FasilitasPage() {
         {/* ======================================================== */}
         {/* BANNER KIOS MANDIRI IOT NAWASENA                        */}
         {/* ======================================================== */}
-        <section className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center sm:text-left">
+        <section className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold border border-white/30">
               <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
               <span>Fasilitas Otomasi Terdepan</span>

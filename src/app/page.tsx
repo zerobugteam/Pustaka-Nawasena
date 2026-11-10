@@ -72,18 +72,18 @@ export default function HomePage() {
           </p>
 
           {/* Kotak Pencarian Rounded-Pill Besar */}
-          <div className="pt-4 max-w-2xl mx-auto w-full px-2 sm:px-0" data-aos="fade-up">
+          <div className="pt-4 max-w-2xl mx-auto w-full px-1 sm:px-0" data-aos="fade-up">
             <form onSubmit={handleSearch} className="relative flex items-center shadow-2xl rounded-full overflow-hidden bg-white/95 p-1 border border-slate-200">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Cari Koleksi, Judul, Penulis, atau Subjek..."
-                className="w-full pl-6 pr-28 py-3.5 text-slate-800 text-sm md:text-base font-medium focus:outline-none placeholder-slate-400 bg-transparent rounded-full"
+                placeholder="Cari Judul, Penulis, atau Subjek..."
+                className="w-full pl-4 sm:pl-6 pr-24 sm:pr-28 py-3 sm:py-3.5 text-slate-800 text-xs sm:text-sm md:text-base font-medium focus:outline-none placeholder-slate-400 bg-transparent rounded-full"
               />
               <button
                 type="submit"
-                className="absolute right-1 px-6 py-2.5 bg-[#ff9800] hover:bg-[#e68900] active:scale-95 text-white font-bold text-sm rounded-full transition-all flex items-center gap-2 shadow-md cursor-pointer"
+                className="absolute right-1 px-4 sm:px-6 py-2 sm:py-2.5 bg-[#ff9800] hover:bg-[#e68900] active:scale-95 text-white font-bold text-xs sm:text-sm rounded-full transition-all flex items-center gap-1.5 sm:gap-2 shadow-md cursor-pointer"
               >
                 <Search className="w-4 h-4" />
                 <span>Cari</span>
@@ -404,7 +404,7 @@ export default function HomePage() {
           <h5 className="text-sm font-semibold text-sky-700 uppercase tracking-wider mb-4">
             Jumlah Koleksi
           </h5>
-          <div className="flex justify-center items-center gap-8 sm:gap-16" data-aos="fade-up">
+          <div className="flex justify-center items-center gap-5 sm:gap-16 flex-wrap" data-aos="fade-up">
             <div className="text-center font-bold text-xl sm:text-2xl text-emerald-600 tabular-nums">
               {totalTitles} Jilid
             </div>
@@ -501,18 +501,18 @@ export default function HomePage() {
             {/* Info Kontak */}
             <div className="space-y-4" data-aos="fade-right" data-aos-delay="100">
               <h4 className="text-lg font-bold text-white mb-3">Kontak Person</h4>
-              <div className="space-y-2.5 text-sm text-white/95">
+              <div className="space-y-2.5 text-sm text-white/95 min-w-0">
                 <p className="flex items-center gap-2.5">
                   <Phone className="w-4 h-4 text-white shrink-0" />
-                  <span>Telepon/WA: 085134791603</span>
+                  <span className="break-words">Telepon/WA: 085134791603</span>
                 </p>
                 <p className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-white shrink-0" />
-                  <span>E-Mail: arsiptubakorwil@gmail.com</span>
+                  <span className="break-all sm:break-normal">E-Mail: arsiptubakorwil@gmail.com</span>
                 </p>
                 <p className="flex items-center gap-2.5">
                   <Globe className="w-4 h-4 text-white shrink-0" />
-                  <span>Website: https://bakorwilmalang.jatimprov.go.id</span>
+                  <span className="break-all sm:break-normal">Website: https://bakorwilmalang.jatimprov.go.id</span>
                 </p>
                 <p className="flex items-start gap-2.5">
                   <MapPin className="w-4 h-4 text-white shrink-0 mt-0.5" />

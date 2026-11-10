@@ -13,6 +13,7 @@ import {
   BookOpen,
   UserCheck,
   Calendar,
+  CircleUserRound,
 } from 'lucide-react';
 
 interface KioskDisplayProps {
@@ -65,10 +66,10 @@ export default function KioskDisplay({
   return (
     <section
       aria-label="Layar Utama Kios Mandiri"
-      className="bg-white w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-slate-200 grid grid-cols-1 lg:grid-cols-12 min-h-[460px] transition-all duration-300 ease-out"
+      className="bg-white w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 grid grid-cols-1 lg:grid-cols-12 lg:min-h-[460px] transition-all duration-300 ease-out"
     >
       {/* Sisi Kiri: Informasi Alur, Detail Transaksi & Tombol Aksi */}
-      <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white">
+      <div className="lg:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between bg-white">
         <div key={stateTransitionKey} className="my-auto animate-kiosk-enter">
         {/* 1. STATE: STANDBY */}
         {mode === 'standby' && (
@@ -163,12 +164,10 @@ export default function KioskDisplay({
               </div>
 
               <div className="flex items-center gap-3">
-                <img
-                  src={activeMember.avatar}
-                  alt={`Foto ${activeMember.nama}`}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 rounded-full object-cover border border-slate-200 shrink-0"
+                <CircleUserRound
+                  className="w-11 h-11 text-slate-400 shrink-0"
+                  strokeWidth={1.6}
+                  aria-hidden="true"
                 />
                 <div className="min-w-0">
                   <p className="text-[11px] font-semibold text-slate-500 uppercase flex items-center gap-1">
@@ -338,8 +337,8 @@ export default function KioskDisplay({
         </div>
       </div>
 
-      {/* Sisi Kanan: Area Pemindaian Fisik (Navy Kontras Tinggi, Sesuai 05_kios_scan_barcode.html) */}
-      <div className="lg:col-span-5 bg-slate-900 p-6 sm:p-10 flex flex-col justify-center items-center text-center text-white">
+      {/* Sisi Kanan: Area Pemindaian Fisik */}
+      <div className="lg:col-span-5 bg-slate-900 p-6 sm:p-8 lg:p-10 flex flex-col justify-center items-center text-center text-white">
         <div key={`right-${mode}`} className="w-full flex justify-center animate-kiosk-enter">
         {(mode === 'standby' || mode === 'error') && (
           <div className="w-full max-w-xs space-y-5">

@@ -11,6 +11,7 @@ import {
   ChevronDown,
   ArrowRight,
   Monitor,
+  CircleUserRound,
 } from 'lucide-react';
 import { playBuzzerBeep, playVoicePrompt, DFPLAYER_TRACKS } from '@/utils/soundEffects';
 
@@ -70,7 +71,7 @@ export default function HardwareSimulator({
   return (
     <section
       aria-label="Panel Uji Simulasi Perangkat Kios"
-      className="bg-white/95 backdrop-blur-sm border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl w-full max-w-5xl mx-auto space-y-6 transition-all duration-300 ease-out"
+      className="bg-white/95 backdrop-blur-sm border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl w-full max-w-5xl mx-auto space-y-5 sm:space-y-6 transition-all duration-300 ease-out"
     >
       {/* Header Clean */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -122,10 +123,10 @@ export default function HardwareSimulator({
       </div>
 
       {/* Strip Status Ringkas */}
-      <div className="bg-slate-50/80 rounded-2xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-slate-600">
+      <div className="bg-slate-50/80 rounded-2xl px-3.5 sm:px-4 py-2.5 flex flex-col items-start sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 text-xs">
+        <div className="flex items-center gap-2 text-slate-600 min-w-0 max-w-full">
           <Monitor className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden="true" />
-          <span className="font-semibold text-slate-800 tabular-nums">
+          <span className="font-semibold text-slate-800 tabular-nums truncate">
             {iotState.lcdMessageLine1 || 'NAWASENA SMART'} — {iotState.lcdMessageLine2 || 'BAKORWIL III MLG'}
           </span>
         </div>
@@ -199,12 +200,10 @@ export default function HardwareSimulator({
                 className="group w-full flex items-center justify-between gap-3 py-3 px-2 -mx-2 rounded-xl hover:bg-slate-50 active:scale-[0.99] text-left transition-all duration-200 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-600"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <img
-                    src={member.avatar}
-                    alt={`Foto ${member.nama}`}
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 rounded-full object-cover shrink-0 border border-slate-200"
+                  <CircleUserRound
+                    className="w-9 h-9 text-slate-400 shrink-0"
+                    strokeWidth={1.6}
+                    aria-hidden="true"
                   />
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-semibold text-slate-800 group-hover:text-slate-950 truncate transition-colors">

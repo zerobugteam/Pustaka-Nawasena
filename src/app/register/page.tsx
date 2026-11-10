@@ -63,7 +63,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden flex items-center justify-center p-4 font-sans select-none">
+    <div className="relative min-h-[100dvh] w-full overflow-x-hidden flex flex-col items-center justify-center px-4 py-16 sm:py-8 font-sans select-none">
       
       {/* Background Gambar Utama Bakorwil dengan Blur & Overlay Gelap (Persis 03_halaman_register.png) */}
       <div className="fixed inset-0 z-0">
@@ -93,9 +93,9 @@ export default function RegisterPage() {
         <span>Beranda</span>
       </Link>
 
-      {/* Auth Card Putih di Tengah (Persis .auth-card di 03_halaman_register.html) */}
+      {/* Auth Card Putih di Tengah */}
       <div
-        className="relative z-10 w-[90%] max-w-[380px] bg-white rounded-[16px] px-7 py-6 shadow-2xl animate-in fade-in zoom-in-95 duration-500"
+        className="relative z-10 w-full max-w-[380px] bg-white rounded-[16px] px-5 sm:px-7 py-6 shadow-2xl animate-in fade-in zoom-in-95 duration-500"
         style={{
           boxShadow: '0 15px 35px rgba(0, 0, 0, 0.3)',
         }}
